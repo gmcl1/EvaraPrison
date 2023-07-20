@@ -1,0 +1,9 @@
+name: PrisonCore
+version: '${project.version}'
+main: net.evara.prison.PrisonCore
+api-version: '1.19'
+commands:
+  ci:
+    description: 'Opens the custom inventory'
+    usage: '/ci'
+    aliases: [custominventory]
