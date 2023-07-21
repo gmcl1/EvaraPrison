@@ -8,6 +8,16 @@ import java.util.List;
 
 public class Text {
 
+    public static List<String> color(List<String> lore){
+        List<String> colored = new ArrayList<>();
+        lore.forEach(line -> colored.add(Text.colorize(line)));
+        return colored;
+    }
+
+    public static List<String> color(String... lore){
+        return color(Arrays.asList(lore));
+    }
+
     public static String format(String input) {
         String msg = colorize(input);
         return SmallCaps.convert(msg);

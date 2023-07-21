@@ -2,27 +2,46 @@ package net.evara.prison.mines;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.evara.prison.customitem.items.RobotItem;
+import net.evara.prison.mines.robot.MineRobot;
 import net.evara.prison.utils.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
 public class PrivateMineMember implements Comparable<PrivateMineMember> {
+
+    private static final int MAX_ROBOTS = 5;
 
     private final PrivateMine mine;
     private final UUID uuid;
     private PrivateMineRank rank;
     private long blocksMined = 0;
     private double experienceEarnedForMine = 0.0D;
+    private Map<UUID, MineRobot> robots;
 
     public PrivateMineMember(PrivateMine mine, UUID uuid, boolean founder) {
         this.mine = mine;
         this.uuid = uuid;
         this.rank = founder ? PrivateMineRank.FOUNDER : PrivateMineRank.MEMBER;
+        this.robots = new HashMap<>();
+    }
+
+    public void addRobot(MineRobot robot){
+        if(this.robots.size() >= MAX_ROBOTS){
+            return;
+        }
+        this.robots.put(robot.getId(), robot);
+    }
+
+    public void removeRobot(MineRobot robot){
+        RobotItem robotItem = new RobotItem(robot.getType());
+        getPlayer().getInventory().addItem(robotItem.build());
+        this.robots.remove(robot.getId());
     }
 
     public void promote() {

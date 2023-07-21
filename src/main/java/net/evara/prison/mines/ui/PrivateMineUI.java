@@ -131,7 +131,7 @@ public class PrivateMineUI extends Gui {
                         .enchant(Enchantment.DIG_SPEED)
                         .hideAttributes()
                         .build(() -> {
-
+                            new PrivateMineMemberUI(getPlayer(), mine).open();
                         })
         );
 

@@ -16,11 +16,25 @@ public class RobotCommand extends PrisonCommand {
     public RobotCommand(PrisonCore plugin) {
         super(plugin, "robot");
         addChild(new RobotContainerCommand(plugin));
+        addChild(new RobotCombineCommand(plugin));
     }
 
     @Override
     public void execute(ICommandContext context) {
 
+    }
+
+    public static class RobotCombineCommand extends PrisonCommand {
+
+            public RobotCombineCommand(PrisonCore plugin) {
+                super(plugin, "combine");
+            }
+
+            @Override
+            public void execute(ICommandContext context) {
+               Player player = (Player) context.getSender();
+               new RobotCombineUI(player).open();
+            }
     }
 
     private static class RobotContainerCommand extends PrisonCommand {
