@@ -1,0 +1,63 @@
+
+Ideas
+-------------------------
+
+1)  Mine based enchants as well that use a different currency
+    (enchantments but more like buffs to statistics, for example Enchant % Boost, Token % Boost and something along those lines ¯\_(ツ)_/¯)
+
+2) Robot
+   have like tiers so that Tier 1 is basically like worst would be Stone Robot best would be Iron Robot or something
+   Robot Containers, open them to receive robots for your mine.
+
+
+-------------------------
+
+ROBOTS
+
+-------------------------
+
+*   Robot Tiers
+        Stone
+        Coal
+        Iron
+        Lapis
+        Redstone
+        Gold
+        Diamond
+        Emerald
+        Bedrock
+
+*   Upgrade by merging
+        Stone + Stone Robots -> Coal Robot
+        Coal + Coal Robots -> Iron Robot
+        Iron + Iron Robots -> Gold Robot
+        Gold + Gold Robots -> Diamond Robot
+        Diamond + Diamond Robots -> Emerald Robot
+        Emerald + Emerald Robots -> Ruby Robot
+
+*   Another thing for rank perks we could add is you usually need
+    to click on individual robots to collect the beacons it has generated but if you have a rank you can just click on a nether star
+    or something (where the name tag is currently placed in the gui) and it collects all of them at once, just a QOL thing
+
+-------------------------
+
+Prestige Symbol: ❃
+Token Symbol: ⛃
+Beacons: ☆
+Dot: •
+Vertical Line Symbol (for formatting): |
+Vertical Line Symbol (Thick): ║
+Vertical Line Symbol (Thick 2): ╬
+Vertical Line Symbol (Thick 3): ╣
+Vertical Line Symbol (Thick 4): ╠
+Vertical Bar Symbol: ┃
+Vertical Bar Symbol (Thick): ┇
+Vertical Bar Symbol (Thick 2): ┋
+Vertical Bar Symbol (Thick 3): ┊
+Vertical Bar Symbol (Thick 4): ┆
+Horizontal Line Symbol: ━
+Horizontal Line Symbol (for formatting): -
+Horizontal Line Symbol (Thick): ═
+Horizontal Line Symbol (Thick 2): ━
+Horizontal Line Symbol (Thick 3): ━━
+Tokens Per Block: Random Int between 1 - 25

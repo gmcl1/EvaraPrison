@@ -72,7 +72,6 @@ public class Thunder extends Enchant {
                     LightningStrike s = loc.getWorld().strikeLightningEffect(loc);
 
                     s.setFireTicks(0);
-                    s.setFlashCount(60);
 
                 });
 

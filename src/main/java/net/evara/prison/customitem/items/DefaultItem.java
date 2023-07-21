@@ -1,6 +1,5 @@
 package net.evara.prison.customitem.items;
 
-import net.evara.prison.utils.ItemBuilder;
 import net.evara.prison.customitem.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -11,7 +10,7 @@ import java.util.Objects;
 public class DefaultItem extends CustomItem {
 
     public DefaultItem() {
-        setIdentifier("default_item");
+        super("default_item");
     }
 
     @Override
@@ -22,11 +21,6 @@ public class DefaultItem extends CustomItem {
 
     @Override
     public ItemStack make() {
-        return new ItemBuilder()
-                .setLore(
-                        "&7This is a default item.",
-                        "&7You can use this as a template for your own custom items."
-                )
-                .build();
+        return new ItemStack(Material.DIAMOND);
     }
 }

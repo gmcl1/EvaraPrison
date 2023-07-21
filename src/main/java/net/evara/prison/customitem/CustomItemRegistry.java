@@ -19,7 +19,7 @@ public class CustomItemRegistry {
     }
 
     public void registerAllCustomItems() {
-        Reflections reflections = new Reflections("me.gary.prisoncore.customitem.items");
+        Reflections reflections = new Reflections("net.evara.prison.customitem.items");
         for (Class<? extends CustomItem> clazz : reflections.getSubTypesOf(CustomItem.class)) {
             try {
                 CustomItem customItem = clazz.newInstance();

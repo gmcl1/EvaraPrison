@@ -31,7 +31,7 @@ public class JackHammer extends Enchant {
                 10,
                 50000,
                 5,
-                2394,
+                0.12,
                 EnchantType.NORMAL,
                 12,
                 Material.IRON_PICKAXE

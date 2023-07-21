@@ -5,6 +5,8 @@ import lombok.Setter;
 import me.lucko.helper.item.ItemStackBuilder;
 import me.lucko.helper.menu.Item;
 import net.evara.prison.mines.ui.PrivateMineUI;
+import net.evara.prison.player.EvaraPlayer;
+import net.evara.prison.player.PlayerManager;
 import net.evara.prison.utils.ProgressBar;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -28,6 +30,7 @@ public class PrivateMineInfo {
     private double allTimeExperienceGained;
     private long level;
     private double experience;
+    private long beacons;
 
     public PrivateMineInfo(PrivateMine mine) {
         this.mine = mine;
@@ -52,7 +55,7 @@ public class PrivateMineInfo {
                 .suffix("]")
                 .build().getBarWithPercent();
 
-        player.sendActionBar(progress);
+        player.sendMessage(progress);
     }
 
     public double getRequiredExperience() {
@@ -87,7 +90,9 @@ public class PrivateMineInfo {
         this.allTimeMembers++;
     }
 
-    public Item toMenuItem(MineManager manager, Player player) {
+    public Item toMenuItem(PlayerManager playerManager, MineManager manager, Player player) {
+
+        EvaraPlayer evaraPlayer = playerManager.getPlayer(player.getUniqueId());
 
         List<String> lore = new ArrayList<>();
         lore.add("&dLevel: &5" + level);
@@ -108,7 +113,7 @@ public class PrivateMineInfo {
                 .enchant(Enchantment.DIG_SPEED)
                 .hideAttributes()
                 .build(() ->
-                        new PrivateMineUI(player, this.mine, manager).open()
+                        new PrivateMineUI(player,  playerManager, this.mine, manager).open()
                 );
     }
 

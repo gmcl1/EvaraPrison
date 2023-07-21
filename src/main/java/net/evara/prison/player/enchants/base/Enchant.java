@@ -36,6 +36,7 @@ public abstract class Enchant {
 
     /**
      * Called when {@link Enchant} is activated
+     *
      * @return the amount of blocks mined
      */
     public abstract long onActivate(BlockBreakEvent e, PrivateMine mine, EvaraPlayer player, AppliedEnchant enchant);
@@ -51,18 +52,40 @@ public abstract class Enchant {
         return (Math.random() <= getCurrentChanceOfActivating(level));
     }
 
-    public double getCost(long currentLevel, long levels){
-        return (cost * ((double) (currentLevel + levels) / 15) + 25);
+    public int getLevelsPlayerCanAfford(long currentLevel, double tokens) {
+
+        int totalLevels = 0;
+        double cost = getCost(currentLevel);
+        while (tokens >= cost && currentLevel + totalLevels < maxLevel) {
+            tokens -= cost;
+            cost = getCost(currentLevel + (totalLevels + 1));
+            totalLevels++;
+        }
+
+        return totalLevels;
+    }
+
+    public double getCost(long currentLevel, long levels) {
+        double totalCost = 0;
+        for (int i = 0; i < levels; i++) {
+            totalCost += getCost(currentLevel + i);
+        }
+        return totalCost;
     }
 
     public double getCost(long level) {
         return (cost * ((double) (level + 1) / 15) + 25);
     }
 
+    public double getPrestigeCost(long level, long prestige) {
+        if (prestige == this.maxPrestige) return -1;
+        double baseCost = getCost(level);
+        return baseCost + (baseCost * ((prestige + 1) * 0.30));
+    }
+
     public double getCurrentChanceOfActivating(long level) {
         return (baseChance + (level * (maxChance - baseChance) / maxLevel));
     }
-
 
 
 }

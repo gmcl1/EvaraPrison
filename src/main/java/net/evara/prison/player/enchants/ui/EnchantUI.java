@@ -8,10 +8,8 @@ import net.evara.prison.player.EvaraPlayer;
 import net.evara.prison.player.enchants.base.Enchant;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class EnchantUI extends Gui {
@@ -41,9 +39,6 @@ public class EnchantUI extends Gui {
         evaraPlayer.getEnchantHolder().getAll()
                 .forEach(enchant -> {
 
-                    int[] amounts = new int[]{
-                            1, 5, 25, 100, 1000
-                    };
 
                     Enchant base = enchant.getEnchant();
                     List<String> lore = new ArrayList<>(base.getDescription());
@@ -53,26 +48,22 @@ public class EnchantUI extends Gui {
                     lore.add("&fChance: &d" + Math.floor(base.getCurrentChanceOfActivating(enchant.getLevel())) + "%");
                     base.additionalInformation(enchant).ifPresent(lore::add);
                     lore.add("");
-                    lore.add("&d Upgrades");
-                    for (int amount : amounts) {
-                        lore.add("&f+" + amount + " Price: &d" + Math.floor(base.getCost(enchant.getLevel(), amount)) + " Tokens");
-                    }
+                    lore.add("&d Click Here To Upgrade!");
 
-                    HashMap<ClickType, Runnable> actions = new HashMap<>();
-                    actions.put(ClickType.DROP, () -> {
-                        enchant.addLevel(1000);
-                        redraw();
-                    });
+                    boolean maxLevel = enchant.getLevel() >= base.getMaxLevel();
+                    boolean maxPrestige = enchant.getPrestige() >= base.getMaxPrestige();
+
+                    String name = maxLevel ? "&c" + base.getDisplayName() + " &7(Max Level)" : "&d" + base.getDisplayName();
+                    name = maxPrestige ? name + " &7(Max Prestige)" : name;
 
                     setItem(
                             base.getSlot(),
                             ItemStackBuilder.of(base.getIcon())
-                                    .name(base.getDisplayName())
+                                    .name(name)
                                     .lore(lore)
-                                    .hideAttributes()
-                                    .buildFromMap(
-                                            actions
-                                    )
+                                    .build(() -> {
+                                        new EnchantUpgradeUI(getPlayer(), enchant, evaraPlayer).open();
+                                    })
                     );
 
                 });

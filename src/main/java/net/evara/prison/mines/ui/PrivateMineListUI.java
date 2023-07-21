@@ -6,6 +6,7 @@ import me.lucko.helper.menu.paginated.PaginatedGuiBuilder;
 import me.lucko.helper.menu.scheme.MenuScheme;
 import me.lucko.helper.menu.scheme.StandardSchemeMappings;
 import net.evara.prison.mines.MineManager;
+import net.evara.prison.player.PlayerManager;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -14,20 +15,20 @@ import java.util.stream.Collectors;
 
 public class PrivateMineListUI extends PaginatedGui {
 
-    private static Function<PaginatedGui, List<Item>> getContent(Player player, MineManager manager) {
+    private static Function<PaginatedGui, List<Item>> getContent(Player player, PlayerManager playerManager,  MineManager manager) {
         return gui -> {
             return manager.getLoadedPrivateMines()
                     .values()
                     .stream()
                     .map(mine -> {
-                        return mine.getInfo().toMenuItem(manager, player);
+                        return mine.getInfo().toMenuItem(playerManager, manager, player);
                     })
                     .collect(Collectors.toList());
         };
     }
 
-    public PrivateMineListUI(Player player, MineManager manager) {
-        super(getContent(player, manager), player,
+    public PrivateMineListUI(Player player, PlayerManager playerManager, MineManager manager) {
+        super(getContent(player, playerManager, manager), player,
                 PaginatedGuiBuilder.create()
                         .title("&5&lPrivate Mine")
                         .scheme(

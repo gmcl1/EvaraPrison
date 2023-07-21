@@ -32,10 +32,24 @@ public class CustomItemManager implements Listener {
     public void onUse(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         ItemStack itemInHand = player.getInventory().getItemInMainHand();
-        if (e.getHand() != EquipmentSlot.HAND) return;
-        if (!isCustomItem(itemInHand)) return;
+
+        if (e.getHand() != EquipmentSlot.HAND) {
+            System.out.println("Hand is not main hand");
+            return;
+        }
+
+        if (!isCustomItem(itemInHand))  {
+            System.out.println("Item is not custom");
+            return;
+        }
+
         Optional<CustomItem> optional = getCustomItem(itemInHand);
-        if (optional.isEmpty()) return;
+
+        if (optional.isEmpty()) {
+            System.out.println("Custom item is empty");
+            return;
+        }
+
         CustomItem customItem = optional.get();
         customItem.onUse(e);
     }

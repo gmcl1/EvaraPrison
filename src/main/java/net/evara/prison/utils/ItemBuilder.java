@@ -5,98 +5,130 @@ import net.evara.prison.PrisonCore;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.Plugin;
 
 import java.util.*;
 
 @Getter
 public class ItemBuilder {
 
-    private ItemStack item = null;
-    private Material material = Material.STONE;
-    private String name = "&bDefault";
-    private List<String> lore = new ArrayList<>();
-    private int amount = 1;
-    private int data = 0;
-    private final Map<String, Pair<PersistentDataType<?, ?>, ?>> persistentData = new HashMap<>();
 
-    public ItemBuilder of(ItemStack item) {
-        this.item = item;
+    private ItemStack itemStack = null;
+    private String name;
+    private Material material;
+    private List<String> lore;
+    private int amount;
+    private boolean glow;
+    private boolean hideAttributes;
+    private int customModelData;
+    private Map<String, Pair<PersistentDataType<?, ?>, ?>> persistentData = new HashMap<>();
+
+    public ItemBuilder of(ItemStack itemStack) {
+        this.itemStack = itemStack;
         return this;
     }
 
-    public ItemBuilder setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public ItemBuilder setLore(List<String> lore) {
-        this.lore = lore;
-        return this;
-    }
-
-    public ItemBuilder setLore(String... lore) {
-        this.lore = new ArrayList<>(Arrays.asList(lore));
-        return this;
-    }
-
-    public ItemBuilder setAmount(int amount) {
-        this.amount = amount;
-        return this;
-    }
-
-    public ItemBuilder setData(int data) {
-        this.data = data;
-        return this;
-    }
-
-    public ItemBuilder setMaterial(Material material) {
+    public ItemBuilder of(Material material) {
         this.material = material;
         return this;
     }
 
-    public ItemBuilder addPersistentData(String key, PersistentDataType<?, ?> type, Object value) {
-        persistentData.put(key, Pair.of(type, value));
+    public ItemBuilder of(Material material, int amount) {
+        this.material = material;
+        this.amount = amount;
         return this;
     }
 
-    public ItemBuilder removePersistentData(String key) {
-        persistentData.remove(key);
+    public ItemBuilder name(String name) {
+        this.name = name;
         return this;
     }
 
-    public ItemBuilder clearPersistentData() {
-        persistentData.clear();
+    public ItemBuilder lore(List<String> lore) {
+        this.lore = lore;
         return this;
     }
 
+    public ItemBuilder lore(String... lore) {
+        this.lore = Arrays.asList(lore);
+        return this;
+    }
+
+    public ItemBuilder amount(int amount) {
+        this.amount = amount;
+        return this;
+    }
+
+    public ItemBuilder glow(boolean glow) {
+        this.glow = glow;
+        return this;
+    }
+
+    public ItemBuilder hideAttributes(boolean hideAttributes) {
+        this.hideAttributes = hideAttributes;
+        return this;
+    }
+
+    public ItemBuilder customModelData(int customModelData) {
+        this.customModelData = customModelData;
+        return this;
+    }
+
+    public <T, Z> ItemBuilder addPersistentData(String key, PersistentDataType<T, Z> type, Z value) {
+        if (value != null) {
+            this.persistentData.put(key, Pair.of(type, value));
+        }
+        return this;
+    }
+
+    @SuppressWarnings("deprecation")
     public <T, Z> ItemStack build() {
-        Plugin plugin = PrisonCore.getProvidingPlugin(PrisonCore.class);
+        ItemStack itemStack = this.itemStack != null ? this.itemStack : new ItemStack(material);
+        itemStack.setAmount(amount);
+        ItemMeta meta = itemStack.getItemMeta();
 
-        ItemStack item = this.item == null ? new ItemStack(material) : this.item;
-        item.setAmount(amount);
-        ItemMeta meta = item.getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        meta.setCustomModelData(data);
-        meta.setDisplayName(name);
-        meta.setLore(lore);
-        persistentData.forEach(
-                (key, value) -> {
-                    NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
+        meta.setDisplayName(Text.colorize(name));
+        meta.setLore(colorize(lore));
 
-                    PersistentDataType<T, Z> type = (PersistentDataType<T, Z>) value.getLeft();
-                    Z data = (Z) value.getRight();
+        if (glow) {
+            meta.addEnchant(Enchantment.CHANNELING, 1, true);
+        }
 
-                    container.set(namespacedKey, type, data);
-                }
-        );
+        if (hideAttributes) {
+            meta.addItemFlags(ItemFlag.values());
+        }
 
-        item.setItemMeta(meta);
-        return item;
+        if (customModelData != 1) {
+            meta.setCustomModelData(customModelData);
+        }
+
+
+        this.persistentData.forEach((key, data) -> {
+
+            PersistentDataType<T, Z> type = (PersistentDataType<T, Z>) data.getLeft();
+            Z value = (Z) data.getRight();
+
+            container.set(new NamespacedKey(PrisonCore.getInstance(), key), type, value);
+            System.out.println(type.toString());
+            System.out.println("Added " + key + " to " + itemStack.getType().name() + " with value " + value.toString());
+        });
+
+        itemStack.setItemMeta(meta);
+        return itemStack;
+    }
+
+    private List<String> colorize(List<String> input) {
+        List<String> output = new ArrayList<>();
+        for (String s : input) {
+            output.add(Text.colorize(s));
+        }
+        return output;
     }
 
 
